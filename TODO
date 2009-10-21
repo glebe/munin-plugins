@@ -1,0 +1,2 @@
+* Add a graph of average memory usage per process
+* Measure usage using 'pmap -d' instead of ps
