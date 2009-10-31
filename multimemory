@@ -1,4 +1,4 @@
-!/bin/sh
+#!/bin/sh
 # -*- sh -*-
 
 : <<=cut
@@ -45,7 +45,8 @@ None known
 =head1 AUTHOR
 
 Originally: matthias?
-Modified by: dominic@dubdot.com
+Modified by: github.com/dominics github.com/yhager
+Thanks to: wix
 
 =head1 LICENSE
 
@@ -84,5 +85,5 @@ for name in $names; do
         fieldname=$(clean_fieldname $name)
 	printf "$fieldname.value "
 
-	ps auxww | grep -w $name | grep -v grep | sed -re 's/[ ]{1,}/ /g' | /usr/bin/cut -d ' ' -f 6 | /usr/bin/awk '{ total = total + $1 } END { print total }'
+	ps auxww | grep -w $name | grep -v grep | sed -re 's/[ ]{1,}/ /g' | /usr/bin/cut -d ' ' -f 6 | /usr/bin/awk '{ total = total + $1 } END { print total * 1024 }'
 done
