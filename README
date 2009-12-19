@@ -1,1 +1,5 @@
-Test
+There's only one plugin here so far:
+
+== Multimemory ==
+
+This graphs the memory usage of several different processes on a single graph. As of Munin 1.4.2, this plugin is included in the default, bundled plugins - so if you're using a recent version of Munin, you'll probably already have it.
