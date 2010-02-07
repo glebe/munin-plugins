@@ -17,7 +17,11 @@ Any system with a compatible ps command.
 There is no default configuration.  This is an example:
 
   [multimemory]
+	 env.os freebsd
      env.names apache2 mysqld php-cgi
+
+Set env.os to freebsd if you are running this script on a machine which doesnt have
+GNU sed installed (FreeBSD / OpenBSD / Solaris ...), else set it to linux.
 
 The names are used to grep with directly, after cleaning. So, this plugin
 only supports very basic pattern matching. To fix: see multips
@@ -34,6 +38,7 @@ regex given as the process name, as reported by ps.
 
 =head1 VERSION
 
+  0.2 second release, it should now work on machines without GNU sed
   0.1 first release, based on:
     multimemory.in 1590 2008-04-17 18:21:31Z matthias
   As distributed in Debian.
@@ -61,7 +66,7 @@ if [ "$1" = "autoconf" ]; then
 	exit 0
 fi
 
-if [ -z "$names" ]; then
+if [ -z "$names" -o -z "$os" ]; then
   echo "Configuration required"
   exit 1
 fi
@@ -85,5 +90,9 @@ for name in $names; do
         fieldname=$(clean_fieldname $name)
 	printf "$fieldname.value "
 
-	ps auxww | grep -w $name | grep -v grep | sed -re 's/[ ]{1,}/ /g' | /usr/bin/cut -d ' ' -f 6 | /usr/bin/awk '{ total = total + $1 } END { print total * 1024 }'
+	if [ "$os" = "freebsd" ]; then
+		ps auxww | grep -w $name | grep -v grep | sed -Ee 's/[ ]{1,}/ /g' | /usr/bin/cut -d ' ' -f 6 | /usr/bin/awk '{ total = total + $1 } END { print total * 1024 }'
+	else
+		ps auxww | grep -w $name | grep -v grep | sed -re 's/[ ]{1,}/ /g' | /usr/bin/cut -d ' ' -f 6 | /usr/bin/awk '{ total = total + $1 } END { print total * 1024 }'
+	fi
 done
